@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FLUENT IMMERSION — Academy</title>
+<meta name="description" content="Plataforma de Inglês e Espanhol do A0 ao C2.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--green:#00b879;--darkgreen:#087b5b;--mint:#eafaf4;--ink:#17191c;--muted:#73797d;--line:#e3e6e8;--gold:#e39a08;--bg:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}
+.hero{border-bottom:1px solid var(--line);padding:42px 22px 45px;background:radial-gradient(circle at 15% 20%,#00b87918,transparent 34%),radial-gradient(circle at 85% 75%,#e8a51a16,transparent 35%)}
+.wrap{max-width:1220px;margin:auto}.heroGrid{display:flex;align-items:center;justify-content:space-between;gap:28px}.brand{display:flex;gap:13px;align-items:center}.logo{width:52px;height:52px;border-radius:15px;background:linear-gradient(145deg,#00bd80,#009e6b);display:grid;place-items:center;color:#fff;font-size:25px}.brand h1{margin:0;color:var(--darkgreen);font-size:40px;line-height:1;font-weight:900;letter-spacing:-1.5px}.brand p{margin:7px 0 0;color:var(--muted);font-size:14px}.heroText{max-width:800px}.heroText>p{color:var(--muted);line-height:1.55;max-width:730px;margin:17px 0 0}.stats{display:flex;gap:9px;flex-wrap:wrap}.stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 14px;min-width:110px;box-shadow:0 4px 15px #0000000a}.stat small{display:block;color:#777;font-size:11px}.stat b{font-size:19px}.fire{color:#e39a08}.green{color:var(--green)}
+main{padding:30px 22px 60px}.section{margin-bottom:30px}.title{font-size:20px;font-weight:850;margin:0 0 12px}.title i{font-style:normal;color:var(--green)}
+.languages{display:grid;grid-template-columns:repeat(2,200px);gap:12px}.choice{position:relative;text-align:left;background:#fff;border:2px solid var(--line);border-radius:15px;padding:15px;min-height:105px}.choice.active{border-color:var(--green);background:var(--mint)}.flag{font-size:29px;display:block}.choice strong{display:block;margin-top:4px}.choice small{color:#777}.check{position:absolute;right:10px;top:9px;color:var(--green);font-size:18px}
+.levels{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.level{height:50px;background:#fff;border:2px solid var(--line);border-radius:10px}.level.active{border-color:var(--green);background:var(--mint);color:var(--darkgreen);font-weight:800}.desc{margin:7px 0 0;color:#777;font-size:13px}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.skill{height:92px;border:2px solid var(--line);border-radius:14px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:15px}.skill span{font-size:25px;color:#777}.skill.active{border-color:var(--green);background:var(--mint);color:var(--darkgreen)}.skill.active span{color:var(--green)}
+.head{display:flex;justify-content:space-between;align-items:end;margin:34px 0 12px}.head h2{margin:0;font-size:20px}.count{background:#f4f4f4;padding:5px 9px;border-radius:8px;font-size:11px;color:#666}
+.lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.lesson{border:1px solid var(--line);border-radius:15px;background:#fff;padding:19px;min-height:215px;display:flex;flex-direction:column;box-shadow:0 7px 25px #1220180c}.lessonTop{display:flex;justify-content:space-between;gap:8px}.lesson h3{font-size:17px;margin:0;line-height:1.25}.done{color:var(--green);font-size:18px}.lesson p{color:#777;line-height:1.45;font-size:13px;flex:1}.meta{display:flex;gap:6px;margin-bottom:13px}.pill{border:1px solid var(--line);border-radius:7px;padding:4px 7px;font-size:11px}.xp{border-color:#efc873;color:var(--gold)}.lesson button,.primary{height:38px;border:0;border-radius:9px;background:#f2f3f3}.lesson button:hover{background:var(--green);color:#fff}
+.progress{border:1px solid var(--line);border-radius:15px;overflow:hidden}.prow{min-height:68px;padding:14px 17px;border-bottom:1px solid #f0f1f2;display:flex;align-items:center;gap:12px}.prow:last-child{border:0}.dot{width:14px;height:14px;border:2px solid #cdd1d3;border-radius:50%;display:grid;place-items:center;font-size:9px}.dot.ok{border-color:var(--green);color:var(--green)}.pname{flex:1;font-size:13px}.score{color:#777;font-size:13px}.pxp{background:#fff8e9;color:var(--gold);padding:4px 7px;border-radius:7px;font-size:11px}.empty{padding:30px;text-align:center;color:#777;border:1px dashed #d8dcde;border-radius:13px}.progress .empty{border:0}
+footer{border-top:1px solid var(--line);padding:22px;text-align:center;color:#777;font-size:12px}
+.modal{position:fixed;inset:0;background:#14201970;backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:10}.card{background:#fff;width:min(410px,100%);border-radius:20px;padding:25px;box-shadow:0 30px 80px #0003}.card h2{margin:0 0 6px}.card p{color:#777;font-size:13px}.close{float:right;width:30px;height:30px;border:0;border-radius:50%;background:#f2f2f2}.form{display:grid;gap:9px;margin-top:16px}.field{height:44px;border:1px solid var(--line);border-radius:9px;padding:0 12px}.primary{background:var(--green);color:#fff;font-weight:800}.msg{font-size:12px;color:#b33}
+.lessonView{min-height:100vh}.nav{height:56px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px}.back{border:0;background:none}.tags{display:flex;gap:6px}.tag{border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:11px}.lessonMain{max-width:970px;margin:auto;padding:25px 18px 60px}.lessonMain h1{font-size:34px;line-height:1.1;margin:0 0 6px}.sub{color:#777}.lmeta{display:flex;gap:10px;color:#777;font-size:12px;margin:12px 0 27px}.content{border:1px solid var(--line);border-radius:15px;padding:25px 28px;box-shadow:0 5px 20px #0000000a;margin-bottom:24px}.content h2{font-size:22px;margin:0 0 14px}.content p{font-size:16px;line-height:1.7}.content iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px}.exHead{display:flex;justify-content:space-between;align-items:end;margin-bottom:8px}.exHead h2{margin:0;font-size:19px}.bar{height:6px;background:#eee;border-radius:5px;overflow:hidden;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--green)}.exCard{border:1px solid var(--line);border-radius:15px;padding:19px}.question{font-size:16px;line-height:1.5;margin-bottom:14px}.options{display:grid;gap:8px}.option{border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px;text-align:left;font-size:13px}.option.correct{border-color:var(--green);background:var(--mint)}.option.wrong{border-color:#e58b8b;background:#fff3f3}.feedback{margin-top:12px;padding:10px;border-radius:9px;font-size:13px}.good{background:var(--mint);color:var(--darkgreen)}.bad{background:#fff3f3;color:#a33}
+@media(max-width:850px){.heroGrid{align-items:flex-start;flex-direction:column}.levels{grid-template-columns:repeat(4,1fr)}.lessons{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.hero{padding:27px 16px 40px}main{padding:24px 16px 45px}.brand h1{font-size:31px}.languages{grid-template-columns:1fr 1fr}.levels{grid-template-columns:repeat(3,1fr)}.skills{grid-template-columns:1fr 1fr}.lessons{grid-template-columns:1fr}.lessonMain{padding:22px 15px 50px}.lessonMain h1{font-size:27px}.content{padding:19px}.content p{font-size:15px}.tags{display:none}}
+</style>
+</head>
+<body><div id="app"></div>
+<script>
+const SUPABASE_URL='https://rvgcniaowzmsudzliozf.supabase.co';
+const SUPABASE_KEY='sb_publishable_N_xCS0lbbTvG7qWTpAw0ag_vlg1lbHb';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{db:{schema:'fluent_immersion'}});
+const LEVELS=['A0','A1','A2','B1','B2','C1','C2'];
+const LEVEL_NAMES={A0:'Absolute Beginner',A1:'Beginner',A2:'Elementary',B1:'Intermediate',B2:'Upper-Intermediate',C1:'Advanced',C2:'Proficient'};
+const SKILLS=[['reading','📖','Reading'],['writing','✍️','Writing'],['listening','🎧','Listening'],['speaking','🎙️','Speaking']];
+const FLAGS={en:'🇬🇧',es:'🇪🇸'};
+let state={lang:localStorage.fiLang||'en',level:localStorage.fiLevel||'A1',skill:localStorage.fiSkill||'reading',lessons:[],progress:[],user:null,profile:null,lesson:null,items:[],index:0,score:0};
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const save=()=>{localStorage.fiLang=state.lang;localStorage.fiLevel=state.level;localStorage.fiSkill=state.skill};
+
+async function init(){
+ const u=await db.auth.getUser();state.user=u.data.user||null;
+ if(state.user){
+  let p=await db.from('user_profiles').select('*').eq('user_id',state.user.id).maybeSingle();
+  if(!p.data){p=await db.from('user_profiles').upsert({user_id:state.user.id,display_name:state.user.email?.split('@')[0]||'Aluno',current_language:state.lang,current_level:state.level,xp:0,streak_days:0},{onConflict:'user_id'}).select().single()}
+  state.profile=p.data;state.lang=state.profile?.current_language||state.lang;state.level=state.profile?.current_level||state.level;save();
+ }
+ await load();
+}
+async function load(){
+ let lang=await db.from('languages').select('id').eq('code',state.lang).maybeSingle();
+ let level=await db.from('cefr_levels').select('id').eq('code',state.level).maybeSingle();
+ state.lessons=[];
+ if(lang.data&&level.data){
+  let course=await db.from('courses').select('id').eq('language_id',lang.data.id).eq('level_id',level.data.id).maybeSingle();
+  if(course.data){
+   let units=await db.from('units').select('id').eq('course_id',course.data.id);
+   const ids=(units.data||[]).map(x=>x.id);
+   if(ids.length){let q=await db.from('lessons').select('id,title,description,duration_minutes,skill').in('unit_id',ids).eq('published',true).eq('skill',state.skill).order('position');state.lessons=q.data||[]}
+  }
+ }
+ if(state.user){let p=await db.from('progress').select('lesson_id,completion_percent,score_percent').eq('user_id',state.user.id);state.progress=p.data||[]}
+ renderHome();
+}
+function setState(k,v){state[k]=v;save();load()}
+function stats(){
+ const done=state.progress.filter(x=>x.completion_percent>=100).length,xp=state.profile?.xp||0;
+ return '<div class="stats"><div class="stat"><small>⭐ XP total</small><b class="fire">'+xp+'</b></div><div class="stat"><small>🏆 Concluídas</small><b class="green">'+done+'</b></div>'+(state.user?'<div class="stat"><small>👤 Aluno</small><b class="green">'+esc(state.profile?.display_name||'Aluno')+'</b></div>':'<button class="stat" onclick="showAuth()"><small>🔐 Conta</small><b class="green">Entrar</b></button>')+'</div>';
+}
+function renderHome(){
+ document.getElementById('app').innerHTML='<header class="hero"><div class="wrap heroGrid"><div class="heroText"><div class="brand"><div class="logo">🎓</div><div><h1>FLUENT IMMERSION</h1><p>Academy · Inglês &amp; Espanhol · A0 ao C2</p></div></div><p>Aprenda com uma trilha organizada por nível e habilidade. Estude, pratique, responda exercícios e acompanhe seu progresso.</p></div>'+stats()+'</div></header><main class="wrap"><section class="section"><h2 class="title"><i>🌐</i> 1. Escolha o idioma</h2><div class="languages">'+['en','es'].map(l=>'<button class="choice '+(state.lang===l?'active':'')+'" onclick="setState(\'lang\',\''+l+'\')"><span class="flag">'+FLAGS[l]+'</span><strong>'+(l==='en'?'English':'Español')+'</strong><small>'+(l==='en'?'Inglês':'Espanhol')+'</small>'+(state.lang===l?'<span class="check">✓</span>':'')+'</button>').join('')+'</div></section><section class="section"><h2 class="title"><i>🎓</i> 2. Escolha o nível (CEFR)</h2><div class="levels">'+LEVELS.map(l=>'<button class="level '+(state.level===l?'active':'')+'" onclick="setState(\'level\',\''+l+'\')">'+l+'</button>').join('')+'</div><p class="desc">'+state.level+' — '+LEVEL_NAMES[state.level]+'</p></section><section class="section"><h2 class="title"><i>📚</i> 3. Escolha a habilidade</h2><div class="skills">'+SKILLS.map(s=>'<button class="skill '+(state.skill===s[0]?'active':'')+'" onclick="setState(\'skill\',\''+s[0]+'\')"><span>'+s[1]+'</span>'+s[2]+'</button>').join('')+'</div></section><div class="head"><h2>4. Lições disponíveis</h2><span class="count">'+state.lessons.length+' lições</span></div><section class="lessons">'+(state.lessons.length?state.lessons.map(lessonCard).join(''):'<div class="empty" style="grid-column:1/-1">Nenhuma lição publicada para esta combinação ainda.</div>')+'</section><div class="head"><h2>🏆 Seu progresso</h2></div><section class="progress">'+progressRows()+'</section></main><footer>FLUENT IMMERSION · Academy · 2026</footer><div id="modal"></div>';
+}
+function lessonCard(l){const p=state.progress.find(x=>x.lesson_id===l.id),done=p?.completion_percent>=100;return '<article class="lesson"><div class="lessonTop"><h3>'+esc(l.title)+'</h3><span class="done">'+(done?'✓':'')+'</span></div><p>'+esc(l.description||'Pratique esta habilidade com uma atividade guiada.')+'</p><div class="meta"><span class="pill">◷ '+(l.duration_minutes||15)+' min</span><span class="pill xp">☆ 10 XP</span></div><button onclick="openLesson(\''+l.id+'\')">'+(done?'Revisar lição':'Começar lição')+'</button></article>'}
+function progressRows(){if(!state.progress.length)return '<div class="empty">Faça sua primeira lição para começar a registrar o progresso.</div>';return state.progress.slice(0,10).map(p=>{const l=state.lessons.find(x=>x.id===p.lesson_id);return '<div class="prow"><span class="dot '+(p.completion_percent>=100?'ok':'')+'">'+(p.completion_percent>=100?'✓':'')+'</span><span class="pname">'+esc(l?.title||'Lição')+'</span><span class="score">'+Math.round(p.completion_percent||0)+'%</span><span class="pxp">☆ '+(p.completion_percent>=100?10:0)+'</span></div>'}).join('')}
+
+async function openLesson(id){
+ document.getElementById('app').innerHTML='<div class="empty" style="margin:40px">Carregando lição...</div>';
+ const l=await db.from('lessons').select('id,title,description,duration_minutes,skill').eq('id',id).single();
+ const c=await db.from('content').select('*').eq('lesson_id',id).order('position');
+ const e=await db.from('exercises').select('id,title,instructions,exercise_type,xp').eq('lesson_id',id).eq('published',true).order('position');
+ let items=[];for(const ex of(e.data||[])){const q=await db.from('exercise_items').select('*').eq('exercise_id',ex.id).order('position');items.push(...(q.data||[]).map(i=>({...i,exercise:ex})))}
+ state.lesson={...l.data,content:c.data||[]};state.items=items;state.index=0;state.score=0;renderLesson();
+}
+function renderContent(){const c=state.lesson.content;if(!c.length)return '<div class="content"><h2>📖 Conteúdo</h2><p>O conteúdo desta lição será disponibilizado aqui.</p></div>';return c.map(x=>x.type==='video'&&x.media_url?'<div class="content"><h2>🎬 '+esc(x.title||'Vídeo')+'</h2><iframe src="'+esc(x.media_url)+'" allowfullscreen></iframe></div>':x.type==='audio'&&x.media_url?'<div class="content"><h2>🎧 '+esc(x.title||'Áudio')+'</h2><audio controls src="'+esc(x.media_url)+'" style="width:100%"></audio></div>':'<div class="content"><h2>📖 '+esc(x.title||'Conteúdo')+'</h2>'+String(x.body||'').split(/\n\s*\n/).map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>').join('')}
+function parseAnswer(a){try{return typeof a==='string'?JSON.parse(a):a}catch{return a}}
+function exercise(it){const opts=Array.isArray(it.options)?it.options:[],a=parseAnswer(it.answer),correct=a?.index??a?.correct??a;return '<div class="exCard"><div class="question">'+esc(it.prompt)+'</div><div class="options">'+opts.map((x,i)=>'<button class="option" onclick="answer('+i+','+JSON.stringify(String(correct))+')">'+String.fromCharCode(65+i)+'. '+esc(x)+'</button>').join('')+'</div><div id="feedback"></div></div>'}
+function renderLesson(){
+ const l=state.lesson,t=state.items.length,it=state.items[state.index];
+ document.getElementById('app').innerHTML='<div class="lessonView"><nav class="nav"><button class="back" onclick="load()">← Voltar</button><div class="tags"><span class="tag">'+FLAGS[state.lang]+' '+(state.lang==='en'?'English':'Español')+'</span><span class="tag">'+state.level+'</span><span class="tag">'+esc(l.skill)+'</span></div></nav><main class="lessonMain"><h1>'+esc(l.title)+'</h1><p class="sub">'+esc(l.description||'Prática guiada.')+'</p><div class="lmeta">◷ '+(l.duration_minutes||15)+' min · ☆ '+(t*10||10)+' XP · '+t+' exercícios</div>'+renderContent()+(t?'<section><div class="exHead"><h2>✍️ Exercícios</h2><span>'+('Exercício '+(state.index+1)+' / '+t)+'</span></div><div class="bar"><i style="width:'+(state.index/t*100)+'%"></i></div>'+exercise(it)+'</section>':'<div class="empty">Esta lição ainda não possui exercícios publicados.</div>')+'</main></div>';
+}
+async function answer(i,c){
+ const it=state.items[state.index],ok=String(i)===String(c);
+ document.querySelectorAll('.option').forEach((b,n)=>{b.disabled=true;if(n===i)b.classList.add(ok?'correct':'wrong');if(String(n)===String(c))b.classList.add('correct')});
+ const f=document.getElementById('feedback');f.className='feedback '+(ok?'good':'bad');f.textContent=ok?'Correto!':'Resposta incorreta. '+(it.explanation||'Revise o conteúdo.');
+ if(ok)state.score++;
+ const b=document.createElement('button');b.className='primary';b.style.marginTop='10px';b.textContent=state.index<state.items.length-1?'Próximo exercício →':'Concluir lição ✓';b.onclick=state.index<state.items.length-1?()=>{state.index++;renderLesson()}:finish;f.appendChild(b);
+}
+async function finish(){
+ const total=state.items.length||1,score=Math.round(state.score/total*100);
+ if(state.user){await db.from('progress').upsert({user_id:state.user.id,lesson_id:state.lesson.id,completion_percent:100,score_percent:score,completed_at:new Date().toISOString(),updated_at:new Date().toISOString()},{onConflict:'user_id,lesson_id'});const add=state.items.length*10;const old=state.profile?.xp||0;await db.from('user_profiles').update({xp:old+add}).eq('user_id',state.user.id);state.profile.xp=old+add}
+ alert('Lição concluída! '+score+'% · +'+state.items.length*10+' XP');load();
+}
+function showAuth(){document.getElementById('modal').innerHTML='<div class="modal"><div class="card"><button class="close" onclick="closeAuth()">×</button><h2>Entrar na plataforma</h2><p>Salve seu progresso, XP e lições concluídas.</p><form class="form" onsubmit="login(event)"><input id="email" class="field" type="email" placeholder="Seu e-mail" required><input id="password" class="field" type="password" placeholder="Sua senha" required><button class="primary">Entrar</button><div id="msg" class="msg"></div></form><button onclick="signup()" style="margin-top:12px;background:none;border:0;color:var(--green);font-size:12px">Criar uma conta</button></div></div>'}
+function closeAuth(){document.getElementById('modal').innerHTML=''}
+async function login(e){e.preventDefault();const r=await db.auth.signInWithPassword({email:document.getElementById('email').value,password:document.getElementById('password').value});if(r.error){document.getElementById('msg').textContent=r.error.message;return}const u=await db.auth.getUser();state.user=u.data.user;const p=await db.from('user_profiles').select('*').eq('user_id',state.user.id).maybeSingle();state.profile=p.data;closeAuth();load()}
+async function signup(){const email=prompt('Seu e-mail');if(!email)return;const password=prompt('Crie uma senha com pelo menos 6 caracteres');if(!password)return;const r=await db.auth.signUp({email,password,options:{data:{display_name:email.split('@')[0]}}});alert(r.error?r.error.message:'Conta criada. Confirme o e-mail se solicitado.')}
+Object.assign(window,{setState,openLesson,answer,showAuth,closeAuth,login,signup,load});
+init();
+</script>
+</body>
+</html>
